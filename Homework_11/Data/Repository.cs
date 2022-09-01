@@ -1,5 +1,7 @@
-﻿namespace Homework_11;
- public class Repository
+﻿using Homework_11.Models;
+
+namespace Homework_11.Data;
+public class Repository
 {
     public ObservableCollection<Client> clients { get; set; }
 
@@ -179,27 +181,27 @@
 
         long seriesAndNumberOfPassport = 0;
 
-        this.clients = new ObservableCollection<Client>(); // Выделение памяти для хранения базы данных Workers
+        clients = new ObservableCollection<Client>(); // Выделение памяти для хранения базы данных Workers
         for (int i = 0; i < Count; i++)    // Заполнение базы данных Workers. Выполняется Count раз
         {
             // Добавляем нового работника в базы данных Workers
-            this.clients.Add(
+            clients.Add(
                 new Client(
                     // выбираем случайное имя из базы данных имён
-                    firstNames[Repository.randomize.Next(Repository.firstNames.Length)],
+                    firstNames[randomize.Next(firstNames.Length)],
 
                     // выбираем случайную фамилию из базы данных фамилий
-                    lastNames[Repository.randomize.Next(Repository.lastNames.Length)],
+                    lastNames[randomize.Next(lastNames.Length)],
 
                     // выбираем случайную фамилию из базы данных фамилий
-                    patronymics[Repository.randomize.Next(Repository.patronymics.Length)],
+                    patronymics[randomize.Next(patronymics.Length)],
 
                     phoneNumber = random.NextInt64(89000000000, 89999999999),
 
                     seriesAndNumberOfPassport = random.NextInt64(89000000000, 89999999999)
                     ));
-        }        
+        }
     }
 
-    
+
 }

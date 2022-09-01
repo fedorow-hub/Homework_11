@@ -1,4 +1,4 @@
-﻿namespace Homework_11;
+﻿namespace Homework_11.Models;
 
 public class Client //: DependencyObject
 {

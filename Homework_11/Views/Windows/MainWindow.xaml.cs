@@ -1,6 +1,8 @@
 ﻿
 
 using System.Windows.Controls;
+using Homework_11.Data;
+using Homework_11.Models;
 
 namespace Homework_11
 {
