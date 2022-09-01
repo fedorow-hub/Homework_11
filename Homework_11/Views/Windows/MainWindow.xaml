@@ -48,7 +48,7 @@
             
         </StackPanel>
         <StackPanel Margin="10,10,10,133">
-            <TextBox TextWrapping="Wrap" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Height="27" Margin="5" />
+            <TextBox TextWrapping="Wrap" Text="Фамилия" HorizontalAlignment="Stretch" Height="27" Margin="5" />
             <TextBox TextWrapping="Wrap" Text="Имя" HorizontalAlignment="Stretch" Height="27" Margin="5" />
             <TextBox TextWrapping="Wrap" Text="Отчество" HorizontalAlignment="Stretch" Height="27" Margin="5" />
             <TextBox TextWrapping="Wrap" Text="Номер телефона" HorizontalAlignment="Stretch" Height="27" Margin="5" />

@@ -15,6 +15,7 @@ namespace Homework_11.ViewModels
         public string Title
         {
             get { return _Title; }
-            set => Set(ref _Title, value);     }
+            set => Set(ref _Title, value); 
+        }
     }
 }
