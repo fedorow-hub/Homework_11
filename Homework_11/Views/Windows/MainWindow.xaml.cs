@@ -21,10 +21,10 @@ namespace Homework_11
             
         }
 
-        private void Button_Delete_Click(object sender, RoutedEventArgs e)
-        {
-            repository.clients.Remove((Client)ListOfClient.SelectedItem);
-        }
+        //private void Button_Delete_Click(object sender, RoutedEventArgs e)
+        //{
+        //    repository.clients.Remove((Client)ListOfClient.SelectedItem);
+        //}
 
         private void Button_Change_Click(object sender, RoutedEventArgs e)
         {
@@ -47,6 +47,7 @@ namespace Homework_11
                 MessageBox.Show("Авторизация не пройдена");
             }
         }
+
     }
     
 }

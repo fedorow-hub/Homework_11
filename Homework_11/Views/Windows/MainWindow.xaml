@@ -4,12 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Homework_11.ViewModels" 
+        xmlns:cmd="clr-namespace:Homework_11.Infrastructure.Commands"
         xmlns:local="clr-namespace:Homework_11"
         mc:Ignorable="d"
         Title="{Binding Path=Title}" MinHeight="450" MaxHeight="700" Width="800">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <cmd:DeleteClientCommand x:Key="DeleteClientCommand"/>
+    </Window.Resources>
 
     <Grid x:Name="layoutGrid">
        
@@ -43,12 +47,13 @@
         <StackPanel Grid.Column="1" Margin="10,10,10,133">
             <Button Content="Авторизация" Height="auto" Margin="5" FontSize="20" Click="Login_Click"/>
             <Button Content="Добавить" Height="auto" Margin="5" FontSize="20" />
-            <Button Content="Удалить" Height="auto" Margin="5" FontSize="20" Click="Button_Delete_Click"/>
+            <Button Content="Удалить" Height="auto" Margin="5" FontSize="20" Command="{StaticResource DeleteClientCommand}"/>          
+
             <Button Content="Изменить" Height="auto" Margin="5" FontSize="20" Click="Button_Change_Click"/>
             
         </StackPanel>
         <StackPanel Margin="10,10,10,133">
-            <TextBox TextWrapping="Wrap" Text="Фамилия" HorizontalAlignment="Stretch" Height="27" Margin="5" />
+            <TextBox TextWrapping="Wrap" Text="Фамилия" HorizontalAlignment="Stretch" Height="27" Margin="5"/>
             <TextBox TextWrapping="Wrap" Text="Имя" HorizontalAlignment="Stretch" Height="27" Margin="5" />
             <TextBox TextWrapping="Wrap" Text="Отчество" HorizontalAlignment="Stretch" Height="27" Margin="5" />
             <TextBox TextWrapping="Wrap" Text="Номер телефона" HorizontalAlignment="Stretch" Height="27" Margin="5" />
