@@ -25,7 +25,13 @@ namespace Homework_11
         }
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
+            //this.DialogResult = true;
+            if (user_list.SelectedValue.ToString() == "Консультант")
+            {
+                
+            }
         }
+
+
     }
 }

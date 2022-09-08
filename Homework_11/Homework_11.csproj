@@ -7,6 +7,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Images\bank.jpg" />
+  </ItemGroup>
+
   
 
   <ItemGroup>
@@ -18,6 +22,15 @@
   <ItemGroup>
     <PackageReference Include="FontAwesome5" Version="2.1.11" />
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+  </ItemGroup>
+
+  
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\bank.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

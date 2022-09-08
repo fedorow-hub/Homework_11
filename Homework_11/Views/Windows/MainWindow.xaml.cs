@@ -1,8 +1,10 @@
 ﻿
 
 using System.Windows.Controls;
+using System.Windows.Data;
 using Homework_11.Data;
 using Homework_11.Models;
+using Homework_11.Models.Clients;
 
 namespace Homework_11
 {
@@ -10,25 +12,12 @@ namespace Homework_11
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        Repository repository = new Repository(100);
+    {       
 
         public MainWindow()
         {
             InitializeComponent();
-
-            ListOfClient.ItemsSource = repository.clients;
-            
-        }
-
-        //private void Button_Delete_Click(object sender, RoutedEventArgs e)
-        //{
-        //    repository.clients.Remove((Client)ListOfClient.SelectedItem);
-        //}
-
-        private void Button_Change_Click(object sender, RoutedEventArgs e)
-        {
-            
+                        
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -39,7 +28,7 @@ namespace Homework_11
             if (passwordWindow.ShowDialog() == true)
             {
                 
-                    MessageBox.Show("Авторизация пройдена");
+                MessageBox.Show("Авторизация пройдена");
                
             }
             else
@@ -48,6 +37,27 @@ namespace Homework_11
             }
         }
 
+
+        private void ClientCollectionFilter(object sender, System.Windows.Data.FilterEventArgs e)
+        {
+            if(!(e.Item is Client client)) return;
+            if(client.Firstname is null || client.Lastname is null) return;
+
+            var filter_text = ClientFilter.Text;
+            if(filter_text.Length == 0) return;
+
+            if(client.Firstname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            if(client.Lastname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;            
+
+            e.Accepted = false;            
+        }
+
+        private void OnClientFilterTextChanget(object sender, TextChangedEventArgs e)
+        {
+            var text_box = (TextBox)sender;
+            var collection = (CollectionViewSource)text_box.FindResource("ClientCollection");
+            collection.View.Refresh();
+        }
     }
     
 }

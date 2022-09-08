@@ -1,6 +1,7 @@
 ﻿using Homework_11.Data;
 using Homework_11.Infrastructure.Commands;
-using Homework_11.Models;
+using Homework_11.Models.Clients;
+using Homework_11.Models.Worker;
 using Homework_11.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,14 @@ namespace Homework_11.ViewModels
         
         private string _Title = "База данных клиентов";
 
-        private Repository _Repository = new Repository(10);
-
         /// <summary>Заголовок окна</summary>
         public string Title
         {
             get { return _Title; }
-            set => Set(ref _Title, value); 
+            set => Set(ref _Title, value);
         }
+
+        private Repository _Repository = new Repository(100);
 
         public Repository Repository
         {
@@ -31,16 +32,57 @@ namespace Homework_11.ViewModels
             set => Set(ref _Repository, value);
         }
 
+        #region SelectedClient
+
+        private Client _SelectedClient;
+        /// <summary>
+        /// Выбранный клиент
+        /// </summary>
+        public Client SelectedClient
+        {
+            get { return _SelectedClient; }
+            set => Set(ref _SelectedClient, value);
+        }
+        #endregion
+
+        
+
+
         #region Команды
 
-        #region CloseApplicationCommand
-        public ICommand CloseApplicationCommand { get; }
+        //#region CloseApplicationCommand
+        //public ICommand CloseApplicationCommand { get; }
 
-        private bool CanCloseApplicationCommandExecute(object p) => true;
+        //private bool CanCloseApplicationCommandExecute(object p) => true;
 
-        private void OnCloseApplicationCommandExecute(object p)
+        //private void OnCloseApplicationCommandExecute(object p)
+        //{
+        //    Application.Current.Shutdown();
+        //}
+        //#endregion
+
+        #region CreateNewClient
+
+        //public ICommand CreateNewClientCommand { get; }
+
+        //private bool CanCreateNewClientCommandExecute(object p) => true;
+
+        //private void OnCreateNewClientCommandExecute(object p)
+        //{
+        //    Repository.clients.Add(new Client());
+        //}
+        #endregion
+
+        #region DeleteClient
+
+        public ICommand DeleteClientCommand { get; }
+
+        private bool CanDeleteClientCommandExecute(object p) => p is Client client;
+
+        private void OnDeleteClientCommandExecute(object p)
         {
-            Application.Current.Shutdown();
+            if(!(p is Client client)) return;
+            Repository.clients.Remove(_SelectedClient);
         }
         #endregion
 
@@ -51,7 +93,9 @@ namespace Homework_11.ViewModels
         public MainWindowViewModel()
         {
             #region Команды
-            CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecute, CanCloseApplicationCommandExecute);
+            //CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecute, CanCloseApplicationCommandExecute);
+
+            DeleteClientCommand = new LambdaCommand(OnDeleteClientCommandExecute, CanDeleteClientCommandExecute);
             #endregion
         }
 

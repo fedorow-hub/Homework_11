@@ -8,70 +8,110 @@
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:local="clr-namespace:Homework_11"
         mc:Ignorable="d"
-        Title="{Binding Path=Title}" MinHeight="450" MaxHeight="700" Width="800">
+        Title="{Binding Path=Title}" MinHeight="450" MaxHeight="500" Width="800">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        <cmd:DeleteClientCommand x:Key="DeleteClientCommand"/>
-    </Window.Resources>
+    <!--<Window.Resources>
+        <CollectionViewSource x:Key="ClientCollection" Source="{Binding Repository.clients}"/>
+    </Window.Resources>-->
 
-    <Grid x:Name="layoutGrid">
-       
-        <Grid.RowDefinitions>
-            <RowDefinition Height="111*"/>
-            <RowDefinition Height="106*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <DataGrid Name="ListOfClient"
-                  AutoGenerateColumns="False" 
-                  RowBackground ="Aqua"  
-                  AlternatingRowBackground ="White"  
-                  Grid.ColumnSpan="2" 
-                  Margin="10,222,10,10" 
-                  Grid.RowSpan="2" 
+    <DockPanel>
+        <DockPanel.Resources>
+            <CollectionViewSource x:Key="ClientCollection"
+                                  x:Name="ClientCollection"
+                                  Source="{Binding Repository.clients}"
+                                  Filter="ClientCollectionFilter"/>
+        </DockPanel.Resources>
+        <StackPanel x:Name="layoutGrid" DockPanel.Dock="Top">
+            <WrapPanel Margin="10,10,10,10">
+                <Button Margin="5" FontSize="20" Height="50" Width="170">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Solid_Plus" Height="20" Margin="0,0,10,0" Foreground="Yellow">
+                            <fa:ImageAwesome.Effect>
+                                <DropShadowEffect ShadowDepth="2"/>
+                            </fa:ImageAwesome.Effect>
+                        </fa:ImageAwesome>
+                        <TextBlock Text="Добавить" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="50" Width="170" Margin="5" FontSize="20" Command="{Binding DeleteClientCommand}" CommandParameter="{Binding SelectedClient}"  Cursor="Hand">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Solid_Trash" Height="20" Margin="0,0,10,0" Foreground="red">
+                            <fa:ImageAwesome.Effect>
+                                <DropShadowEffect ShadowDepth="2"/>
+                            </fa:ImageAwesome.Effect>
+                        </fa:ImageAwesome>
+                        <TextBlock Text="Удалить" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="50" Width="auto" Margin="5" FontSize="20">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Solid_Pen" Height="20" Margin="0,0,10,0" Foreground="LightGreen">
+                            <fa:ImageAwesome.Effect>
+                                <DropShadowEffect ShadowDepth="2"/>
+                            </fa:ImageAwesome.Effect>
+                        </fa:ImageAwesome>
+                        <TextBlock Text="Редактировать" FontSize="20"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="50" Width="170" Margin="5" FontSize="20" Click="Login_Click" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Solid_SignOutAlt" Height="20" Margin="0,0,10,0" Foreground="White">
+                            <fa:ImageAwesome.Effect>
+                                <DropShadowEffect ShadowDepth="2"/>
+                            </fa:ImageAwesome.Effect>
+                        </fa:ImageAwesome>
+                        <TextBlock Text="Выход"/>
+                    </StackPanel>
+                </Button>
+            </WrapPanel>
+            <DockPanel Margin="20,0">
+                <fa:FontAwesome Icon="Solid_Search" Margin="3,0" FontSize="18" Foreground="Gray"/>
+                <TextBox Name="ClientFilter" TextChanged="OnClientFilterTextChanget"/>
+            </DockPanel>
+            <ListBox Name="ListOfClient"                      
+                  Margin="10,10,10,10" 
                   SelectionMode="Extended"
-                  GridLinesVisibility="Vertical">
+                  MaxHeight="300"                  
+                  ItemsSource="{Binding Source={StaticResource ClientCollection}}"
+                  SelectedItem="{Binding SelectedClient}">
+                <ListBox.ItemTemplate >
+                    <DataTemplate >
+                        <Border BorderBrush="gray" BorderThickness="3" CornerRadius="10" Background="LightBlue">
+                            <StackPanel Margin="10" Width="750" >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Lastname }" Margin="0,0,5,0" FontSize="20"/>
+                                    <TextBlock Text="{Binding Firstname }" Margin="0,0,5,0" FontSize="20"/>
+                                    <TextBlock Text="{Binding Patronymic }" Margin="0,0,5,0" FontSize="20"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Номер телефона:" Margin="0,0,5,0" FontSize="18"/>
+                                    <TextBlock Text="{Binding PhoneNumber }" FontSize="18"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Серия и номер паспорта:" Margin="0,0,10,0" FontSize="18"/>
+                                    <TextBlock Text="{Binding SeriesAndNumberOfPassport }" FontSize="18"/>
+                                </StackPanel>
+                                
+                                
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+               
+            </ListBox>
+
             
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Path=Firstname}" Width="*"/>
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Lastname}" Width="*"/>
-                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=Patronymic}" Width="*"/>
-                <DataGridTextColumn Header="Номер телефона" Binding="{Binding Path=PhoneNumber}" Width="*"/>
-                <DataGridTextColumn Header="Серия и номер паспорта" Binding="{Binding Path=SeriesAndNumberOfPassport}" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
-                
-        <StackPanel Grid.Column="1" Margin="10,10,10,133">
-            <Button Height="auto" Margin="5" FontSize="20" Click="Login_Click">
-                <StackPanel Orientation="Horizontal">
-                    <fa:ImageAwesome Icon="Regular_User" Height="20" Margin="0,0,10,0" Foreground="White"/>
-                    <TextBlock Text="Авторизация"/>                    
-                </StackPanel>
-            </Button>
-            <Button Content="Добавить" Height="auto" Margin="5" FontSize="20"/>
-
-            <Button Content="Удалить" Height="auto" Margin="5" FontSize="20" Command="{StaticResource DeleteClientCommand}"/>          
-
-            <Button Content="Изменить" Height="auto" Margin="5" FontSize="20" Click="Button_Change_Click"/>
-            
+           
         </StackPanel>
-        <StackPanel Margin="10,10,10,133">
-            <TextBox TextWrapping="Wrap" Text="Фамилия" HorizontalAlignment="Stretch" Height="27" Margin="5"/>
-            <TextBox TextWrapping="Wrap" Text="Имя" HorizontalAlignment="Stretch" Height="27" Margin="5" />
-            <TextBox TextWrapping="Wrap" Text="Отчество" HorizontalAlignment="Stretch" Height="27" Margin="5" />
-            <TextBox TextWrapping="Wrap" Text="Номер телефона" HorizontalAlignment="Stretch" Height="27" Margin="5" />
-            <TextBox TextWrapping="Wrap" Text="Серия и номер паспорта" HorizontalAlignment="Stretch" Height="27" Margin="5" />            
-        </StackPanel>
-        
 
+        <StatusBar DockPanel.Dock="Bottom" Height="50">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Text="Режим работы: " VerticalAlignment="Center"/>                
+            </StackPanel>
+        </StatusBar>
+    </DockPanel>
 
-
-
-
-
-    </Grid>
+    
 </Window>
