@@ -1,36 +1,88 @@
 ﻿using Homework_11.Data;
 using Homework_11.Infrastructure.Commands;
+using Homework_11.Models;
 using Homework_11.Models.Clients;
 using Homework_11.Models.Worker;
 using Homework_11.ViewModels.Base;
+using Homework_11.Views.Windows;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Homework_11.ViewModels
 {
     internal class MainWindowViewModel: ViewModel
     {
+        public Action UpdateClientsList;
+        public Worker Worker { get; private set; }        
         
-        private string _Title = "База данных клиентов";
+        public Bank Bank { get; private set; }
 
-        /// <summary>Заголовок окна</summary>
+        #region Window title
+
+        private string title;
+        /// <summary>
+        /// Заголовок окна
+        /// </summary>
         public string Title
         {
-            get { return _Title; }
-            set => Set(ref _Title, value);
+            get => title;
+            set => Set(ref title, value);
         }
+        #endregion
 
-        private Repository _Repository = new Repository(100);
-
-        public Repository Repository
+        public MainWindowViewModel()
         {
-            get { return _Repository; }
-            set => Set(ref _Repository, value);
         }
+        public MainWindowViewModel(Worker worker)
+        {            
+            //Bank = new Bank("Банк А", new ClientsRepository("clients.json"), worker);
+            Bank = new Bank("Банк А", new Repository(10), worker);
+            this.title = $"{Bank.Name}. Работа с клиентами";
+            Worker = worker;
+
+            #region commands
+            DeleteClientCommand = new LambdaCommand(OnDeleteClientCommandExecute, CanDeleteClientCommandExecute);
+            OutLoggingCommand = new LambdaCommand(OnOutLoggingCommandExecute, CanOutLoggingCommandExecute);
+            AddClientCommand = new LambdaCommand(OnAddClientCommandExecute, CanAddClientCommandExecute);
+            #endregion
+
+            UpdateClientsList += UpdateClients;
+        }
+
+        /// <summary>
+        /// Обновление списка клиентов
+        /// </summary>
+        private void UpdateClients()
+        {
+            var selectedIndex = _selectedIndex;
+            Bank.ClientsRepository.Clear();            
+            foreach (var clientInfo in Bank.GetClientsInfo())
+            {
+                Bank.AddClient(clientInfo);
+            }
+
+            SelectedIndex = selectedIndex;
+
+           
+        }
+
+        //private Repository _Repository = new Repository(100);
+
+        //public Repository Repository
+        //{
+        //    get { return _Repository; }
+        //    set => Set(ref _Repository, value);
+        //}
+
+
+
 
         #region SelectedClient
 
@@ -45,32 +97,49 @@ namespace Homework_11.ViewModels
         }
         #endregion
 
-        
-
+        #region SelectedIndex
+        private int _selectedIndex;
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set => Set(ref _selectedIndex, value);
+        }
+        #endregion
 
         #region Команды
 
-        //#region CloseApplicationCommand
-        //public ICommand CloseApplicationCommand { get; }
+        #region OutLoggingCommand
+        public ICommand OutLoggingCommand { get; }
 
-        //private bool CanCloseApplicationCommandExecute(object p) => true;
+        private bool CanOutLoggingCommandExecute(object p) => true;
 
-        //private void OnCloseApplicationCommandExecute(object p)
-        //{
-        //    Application.Current.Shutdown();
-        //}
-        //#endregion
+        private void OnOutLoggingCommandExecute(object p)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
 
-        #region CreateNewClient
+            if(p is Window window)
+            {
+                window.Close();
+            }
+        }
+        #endregion
 
-        //public ICommand CreateNewClientCommand { get; }
+        #region AddClientCommand
 
-        //private bool CanCreateNewClientCommandExecute(object p) => true;
+        public ICommand AddClientCommand { get; }
 
-        //private void OnCreateNewClientCommandExecute(object p)
-        //{
-        //    Repository.clients.Add(new Client());
-        //}
+        private bool CanAddClientCommandExecute(object p) => true;
+
+        private void OnAddClientCommandExecute(object p)
+        {
+            ClientInfoWindow infoWindow = new ClientInfoWindow();
+            infoWindow.Show();
+            if(p is Window window)
+            {
+                window.Close();
+            }
+        }
         #endregion
 
         #region DeleteClient
@@ -82,24 +151,11 @@ namespace Homework_11.ViewModels
         private void OnDeleteClientCommandExecute(object p)
         {
             if(!(p is Client client)) return;
-            Repository.clients.Remove(_SelectedClient);
+            Bank.DeleteClient(client);            
         }
         #endregion
 
         #endregion
-
-
-
-        public MainWindowViewModel()
-        {
-            #region Команды
-            //CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecute, CanCloseApplicationCommandExecute);
-
-            DeleteClientCommand = new LambdaCommand(OnDeleteClientCommandExecute, CanDeleteClientCommandExecute);
-            #endregion
-        }
-
-
 
     }
 }

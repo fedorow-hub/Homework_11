@@ -20,34 +20,16 @@ namespace Homework_11
                         
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            PasswordWindow passwordWindow = new PasswordWindow();
-           
-
-            if (passwordWindow.ShowDialog() == true)
-            {
-                
-                MessageBox.Show("Авторизация пройдена");
-               
-            }
-            else
-            {
-                MessageBox.Show("Авторизация не пройдена");
-            }
-        }
-
-
         private void ClientCollectionFilter(object sender, System.Windows.Data.FilterEventArgs e)
         {
             if(!(e.Item is Client client)) return;
             if(client.Firstname is null || client.Lastname is null) return;
 
             var filter_text = ClientFilter.Text;
-            if(filter_text.Length == 0) return;
+            if (filter_text.Length == 0) return;
 
-            if(client.Firstname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
-            if(client.Lastname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;            
+            if (client.Firstname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
+            if (client.Lastname.Contains(filter_text, StringComparison.OrdinalIgnoreCase)) return;
 
             e.Accepted = false;            
         }
@@ -58,6 +40,8 @@ namespace Homework_11
             var collection = (CollectionViewSource)text_box.FindResource("ClientCollection");
             collection.View.Refresh();
         }
+
+        
     }
     
 }

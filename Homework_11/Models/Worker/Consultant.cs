@@ -27,12 +27,13 @@ public class Consultant : Worker
             });
     }
 
-    public override Client GetClientInfo(Client client)
+    public override ClientAccessInfo GetClientInfo(Client client)
     {
-        
-        client.SeriesAndNumberOfPassport = "**********";
-        
-        return client;
+        ClientAccessInfo clientAccessInfo = new ClientAccessInfo(client);
+        clientAccessInfo.PassportSerie = "****";
+        clientAccessInfo.PassportNumber = "*******";
+              
+        return clientAccessInfo;
     }
 
     public override string ToString()

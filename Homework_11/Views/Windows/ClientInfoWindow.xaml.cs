@@ -1,5 +1,4 @@
-﻿using Homework_11.Models.Worker;
-using Homework_11.ViewModels;
+﻿using Homework_11.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +13,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Homework_11
+namespace Homework_11.Views.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для PasswordWindow.xaml
+    /// Логика взаимодействия для ClientInfoWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class ClientInfoWindow : Window
     {
-        public LoginWindow()
+        public ClientInfoWindow()
         {
             InitializeComponent();
+            DataContext = new ClientInfoViewModel();
         }
 
     }

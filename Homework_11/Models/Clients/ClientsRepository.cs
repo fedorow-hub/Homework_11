@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Homework_11.Models.Clients;
-public class ClientsRepository : IClientsRep
+public class ClientsRepository : IEnumerable<Client>
 {
     private static int Id;
     static ClientsRepository()
@@ -21,14 +21,10 @@ public class ClientsRepository : IClientsRep
     /// <returns></returns>
     private static int NextId() => ++Id;
 
-
-
-
     private List<Client>? _clients;
-    /// <summary>
-    /// Список клиентов
-    /// </summary>
+    
     public List<Client>? Clients => _clients;
+
     /// <summary>
     /// Файл репозитория
     /// </summary>
@@ -111,8 +107,7 @@ public class ClientsRepository : IClientsRep
 
     /// <summary>
     /// Очистка репозитория
-    /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
+    /// </summary>    
     public void Clear()
     {
         if (Clients is null)
@@ -142,10 +137,10 @@ public class ClientsRepository : IClientsRep
         string? dirPath = Path.GetFileName(Path.GetDirectoryName(_path));
         if (dirPath is null)
             return;
-        if (!Directory.Exists(dirPath))
-        {
-            Directory.CreateDirectory(dirPath);
-        }
+        //if (!Directory.Exists(dirPath))
+        //{
+        //    Directory.CreateDirectory(dirPath);
+        //}
         string json = JsonSerializer.Serialize(_clients);
         File.WriteAllText(_path, json);        
     }

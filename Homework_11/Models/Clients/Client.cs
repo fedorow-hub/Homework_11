@@ -6,8 +6,8 @@ public class Client
     private string firstname;
     private string lastname;
     private string patronymic;
-    private long phoneNumber;
-    private string seriesAndNumberOfPassport;
+    private PhoneNumber phoneNumber;
+    private Passport seriesAndNumberOfPassport;
 
     public int Id { get { return id; } set { id = value; } }
 
@@ -17,24 +17,22 @@ public class Client
 
     public string Patronymic { get { return patronymic; } set { patronymic = value; } }
 
-    public long PhoneNumber { get { return phoneNumber; } set { phoneNumber = value; } }
+    public PhoneNumber PhoneNumber { get { return phoneNumber; } set { phoneNumber = value; } }
 
-    public string SeriesAndNumberOfPassport { get { return seriesAndNumberOfPassport; } set { seriesAndNumberOfPassport = value; } }
+    public Passport SeriesAndNumberOfPassport { get { return seriesAndNumberOfPassport; } set { seriesAndNumberOfPassport = value; } }
 
-    public Client(string firstname, string lastname, string patronymic, long phoneNumber, string seriesAndNumberOfPassport= "Нет данных")
-    {        
-        Firstname = firstname;
-        Lastname = lastname;
-        Patronymic = patronymic;
-        PhoneNumber = phoneNumber;
-        SeriesAndNumberOfPassport = seriesAndNumberOfPassport;
+    public Client(string firstname, string lastname, string patronymic, PhoneNumber phoneNumber, Passport seriesAndNumberOfPassport)
+    {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.patronymic = patronymic;
+        this.phoneNumber = phoneNumber;
+        this.seriesAndNumberOfPassport = seriesAndNumberOfPassport;
     }
 
     public override string ToString()
     {
         return $"{firstname} {lastname} {patronymic} {phoneNumber} {seriesAndNumberOfPassport}";
-    }
-
-    
+    }    
 }
 

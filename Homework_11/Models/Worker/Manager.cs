@@ -26,9 +26,12 @@ public class Manager : Worker
                 PhoneNumber = true
             });
     }
-    public override Client GetClientInfo(Client client)
-    {        
-        return client;
+    public override ClientAccessInfo GetClientInfo(Client client)
+    {
+        ClientAccessInfo clientInfo = new ClientAccessInfo(client);
+        clientInfo.PassportSerie = client.SeriesAndNumberOfPassport.Serie.ToString();
+        clientInfo.PassportNumber = client.SeriesAndNumberOfPassport.Number.ToString();
+        return clientInfo;
     }
 
     public override string ToString()

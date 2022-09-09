@@ -1,4 +1,5 @@
-﻿using Homework_11.Models.Clients;
+﻿using Homework_11.Data;
+using Homework_11.Models.Clients;
 using System.Windows.Controls;
 
 namespace Homework_11.Models;
@@ -12,15 +13,25 @@ namespace Homework_11.Models;
     /// <summary>
     /// База клиентов
     /// </summary>
-    public IClientsRep ClientsRepository { get; set; }
+    public ClientsRepository ClientsRepository { get; set; }
 
     private Worker.Worker _worker;
-    public Bank(string name, IClientsRep clientsRepository, Worker.Worker worker)
+
+    public Repository Repository { get; set; }
+
+    public Bank(string name, Repository repository, Worker.Worker worker)
     {
         Name = name;
-        ClientsRepository = clientsRepository;
+        Repository = repository;
         _worker = worker;
     }
+
+    //public Bank(string name, ClientsRepository clientsRepository, Worker.Worker worker)
+    //{
+    //    Name = name;
+    //    ClientsRepository = clientsRepository;
+    //    _worker = worker;
+    //}
 
     /// <summary>
     /// Получение сведений о клиентах
