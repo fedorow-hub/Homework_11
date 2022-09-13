@@ -37,8 +37,9 @@ namespace Homework_11.Models.Clients
         /// <returns></returns>
         public static bool IsPhoneNumber(string number)
         {
-            var result = Regex.Match(number, @"^(\+[0-9]{11})$").Success;            
-            return result;
+            if (Regex.Match(number, @"^(\+[0-9]{11})$").Success || Regex.Match(number, @"^([0-9]{11})$").Success)
+                return true;
+            return false;
         }
 
         /// <summary>

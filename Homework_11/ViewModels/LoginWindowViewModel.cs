@@ -43,8 +43,9 @@ namespace Homework_11.ViewModels
         public ICommand OutCommand { get; }
         private void OnOutCommandExecuted(object p)
         {
-            if(p is Window window)
-            window.Close();
+            Application.Current.Shutdown();
+            //if(p is Window window)
+            //window.Close();
         }
         private bool CanOutCommandExecute(object p) => true;
         #endregion

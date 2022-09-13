@@ -20,6 +20,17 @@ namespace Homework_11.ViewModels
     internal class MainWindowViewModel: ViewModel
     {
         public Action UpdateClientsList;
+
+        //public ObservableCollection<ClientAccessInfo> Clients { get; }
+
+        private ObservableCollection<ClientAccessInfo> clients;
+
+        public ObservableCollection<ClientAccessInfo> Clients
+        {
+            get => clients;
+            set => Set(ref clients, value);
+        }
+
         public Worker Worker { get; private set; }        
         
         public Bank Bank { get; private set; }
@@ -42,18 +53,27 @@ namespace Homework_11.ViewModels
         }
         public MainWindowViewModel(Worker worker)
         {            
-            //Bank = new Bank("Банк А", new ClientsRepository("clients.json"), worker);
-            Bank = new Bank("Банк А", new Repository(10), worker);
+            Bank = new Bank("Банк А", new ClientsRepository("clients.json"), worker);            
             this.title = $"{Bank.Name}. Работа с клиентами";
             Worker = worker;
+
+            Clients = new ObservableCollection<ClientAccessInfo>();
 
             #region commands
             DeleteClientCommand = new LambdaCommand(OnDeleteClientCommandExecute, CanDeleteClientCommandExecute);
             OutLoggingCommand = new LambdaCommand(OnOutLoggingCommandExecute, CanOutLoggingCommandExecute);
             AddClientCommand = new LambdaCommand(OnAddClientCommandExecute, CanAddClientCommandExecute);
-            #endregion
+            EditClientCommand = new LambdaCommand(OnEditClientCommandExecute, CanEditClientCommandExecute);
 
+            _enableAddClient = Worker.DataAccess.Commands.AddClient;
+            _enableDelClient = Worker.DataAccess.Commands.DelClient;
+            _enableEditClient = Worker.DataAccess.Commands.EditClient && Clients.Count > 0;
+
+            
+            #endregion
+            //UpdateClients();
             UpdateClientsList += UpdateClients;
+            UpdateClientsList.Invoke();
         }
 
         /// <summary>
@@ -61,50 +81,37 @@ namespace Homework_11.ViewModels
         /// </summary>
         private void UpdateClients()
         {
-            var selectedIndex = _selectedIndex;
-            Bank.ClientsRepository.Clear();            
+            
+            Clients.Clear();            
             foreach (var clientInfo in Bank.GetClientsInfo())
             {
-                Bank.AddClient(clientInfo);
-            }
-
-            SelectedIndex = selectedIndex;
+                Clients.Add(clientInfo);
+            }                    
 
            
         }
 
-        //private Repository _Repository = new Repository(100);
-
-        //public Repository Repository
-        //{
-        //    get { return _Repository; }
-        //    set => Set(ref _Repository, value);
-        //}
-
-
-
-
         #region SelectedClient
 
-        private Client _SelectedClient;
+        private ClientAccessInfo _SelectedClient;
         /// <summary>
         /// Выбранный клиент
         /// </summary>
-        public Client SelectedClient
+        public ClientAccessInfo SelectedClient
         {
             get { return _SelectedClient; }
             set => Set(ref _SelectedClient, value);
         }
         #endregion
 
-        #region SelectedIndex
-        private int _selectedIndex;
-        public int SelectedIndex
-        {
-            get => _selectedIndex;
-            set => Set(ref _selectedIndex, value);
-        }
-        #endregion
+        //#region SelectedIndex
+        //private int _selectedIndex;
+        //public int SelectedIndex
+        //{
+        //    get => _selectedIndex;
+        //    set => Set(ref _selectedIndex, value);
+        //}
+        //#endregion
 
         #region Команды
 
@@ -128,17 +135,20 @@ namespace Homework_11.ViewModels
         #region AddClientCommand
 
         public ICommand AddClientCommand { get; }
-
-        private bool CanAddClientCommandExecute(object p) => true;
+                
+        private bool CanAddClientCommandExecute(object p)
+        {
+            if (_enableAddClient == true)
+                return true;
+            else return false;
+        }
 
         private void OnAddClientCommandExecute(object p)
         {
             ClientInfoWindow infoWindow = new ClientInfoWindow();
-            infoWindow.Show();
-            if(p is Window window)
-            {
-                window.Close();
-            }
+            ClientInfoViewModel viewModel = new ClientInfoViewModel(new ClientAccessInfo(), Bank, this, Worker.DataAccess);
+            infoWindow.DataContext = viewModel;
+            infoWindow.Show();            
         }
         #endregion
 
@@ -146,15 +156,73 @@ namespace Homework_11.ViewModels
 
         public ICommand DeleteClientCommand { get; }
 
-        private bool CanDeleteClientCommandExecute(object p) => p is Client client;
+        //private bool CanDeleteClientCommandExecute(object p) => p is Client client;
+
+        private bool CanDeleteClientCommandExecute(object p) 
+        {
+            if (_enableDelClient == true && p is Client client)
+                return true;
+            else return false;            
+        }
 
         private void OnDeleteClientCommandExecute(object p)
         {
-            if(!(p is Client client)) return;
-            Bank.DeleteClient(client);            
+            if (SelectedClient is null) return;
+            Bank.DeleteClient(SelectedClient);
+            UpdateClientsList.Invoke();
         }
         #endregion
 
+        #region EditClient
+
+        public ICommand EditClientCommand { get; }
+
+        
+        private bool CanEditClientCommandExecute(object p)
+        {
+            if (p is Client client)
+                return true;
+            else return false;
+        }
+
+        private void OnEditClientCommandExecute(object p)
+        {
+            if (SelectedClient is null) return;
+
+            ClientInfoWindow infoWindow = new ClientInfoWindow();
+            ClientInfoViewModel viewModel = new ClientInfoViewModel(SelectedClient, Bank, this, Worker.DataAccess);
+            infoWindow.DataContext = viewModel;
+            infoWindow.Show();
+        }
+        #endregion
+
+        #endregion
+
+        #region EnableAddClient
+        private bool _enableAddClient;
+        public bool EnableAddClient
+        {
+            get => _enableAddClient;
+            set => Set(ref _enableAddClient, value);
+        }
+        #endregion
+
+        #region EnableDelClient
+        private bool _enableDelClient;
+        public bool EnableDelClient
+        {
+            get => _enableDelClient;
+            set => Set(ref _enableDelClient, value);
+        }
+        #endregion
+
+        #region EnableEditClient
+        private bool _enableEditClient;
+        public bool EnableEditClient
+        {
+            get => _enableEditClient;
+            set => Set(ref _enableEditClient, value);
+        }
         #endregion
 
     }

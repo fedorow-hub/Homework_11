@@ -177,7 +177,7 @@ public class Repository
     public Repository(int Count)
     {
         Random random = new Random();
-        PhoneNumber phoneNumber = new PhoneNumber("+0981341324");
+        PhoneNumber phoneNumber = new PhoneNumber("+09813413248");
 
         Passport seriesAndNumberOfPassport = new Passport();
         seriesAndNumberOfPassport.Serie = 0000;

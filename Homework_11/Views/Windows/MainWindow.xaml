@@ -7,23 +7,23 @@
         xmlns:vm="clr-namespace:Homework_11.ViewModels" 
         xmlns:cmd="clr-namespace:Homework_11.Infrastructure.Commands"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
-        xmlns:local="clr-namespace:Homework_11"
+        xmlns:local="clr-namespace:Homework_11" d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="{Binding Path=Title}" MinHeight="450" MaxHeight="500" Width="800" WindowStartupLocation="CenterScreen">  
-    
+        Title="{Binding Path=Title}" MinHeight="450" MaxHeight="500" Width="800" WindowStartupLocation="CenterScreen">
+     
 
     <DockPanel>
         <DockPanel.Resources>
             <CollectionViewSource x:Key="ClientCollection"
                                   x:Name="ClientCollection"
-                                  Source="{Binding Bank.ClientsRepository}"
+                                  Source="{Binding Path=Clients}"                                  
                                   Filter="ClientCollectionFilter"/>
         </DockPanel.Resources>
         <StackPanel x:Name="layoutGrid" DockPanel.Dock="Top">
             <WrapPanel Margin="10,10,10,10">
                 <Button Margin="5" FontSize="20" Height="50" Width="170" 
                         Command="{Binding AddClientCommand}"
-                        CommandParameter="{Binding ElementName=MainWind}">
+                        Cursor="Hand">
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="Solid_Plus" Height="20" Margin="0,0,10,0" Foreground="Yellow">
                             <fa:ImageAwesome.Effect>
@@ -33,7 +33,9 @@
                         <TextBlock Text="Добавить" FontSize="20"/>
                     </StackPanel>
                 </Button>
-                <Button Height="50" Width="170" Margin="5" FontSize="20" Command="{Binding DeleteClientCommand}" CommandParameter="{Binding SelectedClient}"  Cursor="Hand">
+                <Button Height="50" Width="170" Margin="5" FontSize="20" 
+                        Command="{Binding DeleteClientCommand}" 
+                        CommandParameter="{Binding SelectedClient}"  Cursor="Hand">
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="Solid_Trash" Height="20" Margin="0,0,10,0" Foreground="red">
                             <fa:ImageAwesome.Effect>
@@ -43,7 +45,9 @@
                         <TextBlock Text="Удалить" FontSize="20"/>
                     </StackPanel>
                 </Button>
-                <Button Height="50" Width="auto" Margin="5" FontSize="20">
+                <Button Height="50" Width="auto" Margin="5" FontSize="20" 
+                        Command="{Binding EditClientCommand}" 
+                        CommandParameter="{Binding SelectedClient}" Cursor="Hand">
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="Solid_Pen" Height="20" Margin="0,0,10,0" Foreground="LightGreen">
                             <fa:ImageAwesome.Effect>
@@ -93,7 +97,9 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Серия и номер паспорта:" Margin="0,0,10,0" FontSize="18"/>
-                                    <TextBlock Text="{Binding SeriesAndNumberOfPassport }" FontSize="18"/>
+                                    <TextBlock Text="{Binding PassportSerie }" FontSize="18"/>
+                                    <TextBlock Text="-" FontSize="18"/>
+                                    <TextBlock Text="{Binding PassportNumber }" FontSize="18"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

@@ -26,9 +26,11 @@
         </Grid.RowDefinitions>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Консультант" MinWidth="60" Cursor="Hand" HorizontalAlignment="Center" Margin="0,0,0,20" Command="{Binding SetConsultantMode}"
+            <Button Content="Консультант" MinWidth="60" Cursor="Hand" Margin="0,0,0,20" 
+                    Command="{Binding SetConsultantMode}"
                     CommandParameter="{Binding ElementName=LoginWindows}"/>
-            <Button Content="Менеджер" MinWidth="60" Cursor="Hand" Command="{Binding SetManagerMode}"
+            <Button Content="Менеджер" MinWidth="60" Cursor="Hand" 
+                    Command="{Binding SetManagerMode}"
                     CommandParameter="{Binding ElementName=LoginWindows}"/>
             
             

@@ -21,6 +21,11 @@ public class Client
 
     public Passport SeriesAndNumberOfPassport { get { return seriesAndNumberOfPassport; } set { seriesAndNumberOfPassport = value; } }
 
+    public Client()
+    {
+
+    }
+
     public Client(string firstname, string lastname, string patronymic, PhoneNumber phoneNumber, Passport seriesAndNumberOfPassport)
     {
         this.firstname = firstname;

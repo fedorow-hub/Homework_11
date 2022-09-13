@@ -5,44 +5,59 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Homework_11.ViewModels" 
-        xmlns:local="clr-namespace:Homework_11.Views.Windows"
+        xmlns:local="clr-namespace:Homework_11.Views.Windows" 
+        
         mc:Ignorable="d"
         Title="Карта клиента" Height="350" Width="600" WindowStartupLocation="CenterScreen">
-    <!--<Window.DataContext>
+    <Window.DataContext>
         <vm:ClientInfoViewModel />
-    </Window.DataContext>-->
+    </Window.DataContext>
     <StackPanel Margin="10">
         <StackPanel Orientation="Horizontal" Width="500" Margin="5">
             <TextBlock Text="Фамилия:" Margin="10,0" FontSize="20" Foreground="Gray"/>
-            <TextBox Width="450" Cursor="Arrow" FontSize="18"/>
+            <TextBox Width="450" Cursor="Arrow" FontSize="18"  
+                     Text="{Binding Lastname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EnableLastName}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Width="500" Margin="5">
             <TextBlock Text="Имя:" Margin="10,0" FontSize="20" Foreground="Gray"/>
-            <TextBox Width="450" Cursor="Arrow" FontSize="18"/>
+            <TextBox Width="450" Cursor="Arrow" FontSize="18" 
+                     Text="{Binding Firstname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EnableFirstName}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Width="500" Margin="5">
             <TextBlock Text="Отчество:" Margin="10,0" FontSize="20" Foreground="Gray"/>
-            <TextBox Width="450" Cursor="Arrow" FontSize="18"/>
+            <TextBox Width="450" Cursor="Arrow" FontSize="18" 
+                     Text="{Binding Patronymic, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EnablePatronymic}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Width="500" Margin="5">
             <TextBlock Text="Номер телефона:" Margin="10,0" FontSize="20" Foreground="Gray"/>
-            <TextBox Width="450" Cursor="Arrow" FontSize="18"/>
+            <TextBox Width="450" Cursor="Arrow" FontSize="18" 
+                     Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsEnabled="{Binding EnablePhoneNumber}"/>
         </StackPanel>
         
         <StackPanel Orientation="Horizontal" Width="500" Margin="5">
             <TextBlock Text="Паспорт:" Margin="10,0" FontSize="20" Foreground="Gray"/>
             <TextBlock Text="серия:" Margin="10,0" FontSize="20" Foreground="Gray"/>
-            <TextBox Width="50" Cursor="Arrow" FontSize="18"/>
+            <TextBox Width="50" Cursor="Arrow" FontSize="18" 
+                     Text="{Binding PassportSerie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EnablePassportData}"/>
             <TextBlock Text="номер:" Margin="10,0" FontSize="20" Foreground="Gray"/>
-            <TextBox Width="190" Cursor="Arrow" FontSize="18"/>            
+            <TextBox Width="190" Cursor="Arrow" FontSize="18" 
+                     Text="{Binding PassportNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EnablePassportData}"/>            
         </StackPanel>
         <StackPanel Orientation="Horizontal" Width="320" Margin="5,20">
             <Button Content="Сохранить" Margin="0,0,20,0" Width="150"
-                    Command="{Binding AddClientCommand}"
-                    CommandParameter="{Binding ElementName=ClientWindow}"/>
-            <Button Content="Отмена" Width="150" Cursor="Hand"  
+                    Command="{Binding Path=SaveCommand}"
+                    IsEnabled="{Binding EnableSaveClient}"
+                    CommandParameter="{Binding ElementName=ClientWindow}" Cursor="Hand"/>
+            <Button Content="Отмена" Width="150" Cursor="Hand"
                     Command="{Binding OutCommand}"
-                    CommandParameter="{Binding ElementName=ClientWindow}"/>
+                    CommandParameter="{Binding ElementName=ClientWindow}"
+                    />
         </StackPanel>
     </StackPanel>
 </Window>

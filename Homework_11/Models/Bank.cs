@@ -16,31 +16,22 @@ namespace Homework_11.Models;
     public ClientsRepository ClientsRepository { get; set; }
 
     private Worker.Worker _worker;
-
-    public Repository Repository { get; set; }
-
-    public Bank(string name, Repository repository, Worker.Worker worker)
+        
+    public Bank(string name, ClientsRepository clientsRepository, Worker.Worker worker)
     {
         Name = name;
-        Repository = repository;
+        ClientsRepository = clientsRepository;
         _worker = worker;
     }
-
-    //public Bank(string name, ClientsRepository clientsRepository, Worker.Worker worker)
-    //{
-    //    Name = name;
-    //    ClientsRepository = clientsRepository;
-    //    _worker = worker;
-    //}
 
     /// <summary>
     /// Получение сведений о клиентах
     /// представление зависит от работника
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<Client> GetClientsInfo()
+    public IEnumerable<ClientAccessInfo> GetClientsInfo()
     {
-        var clientsInfo = new List<Client>();
+        var clientsInfo = new List<ClientAccessInfo>();
         foreach (var client in ClientsRepository)
         {
             clientsInfo.Add(_worker.GetClientInfo(client));
@@ -60,6 +51,7 @@ namespace Homework_11.Models;
 
     public void DeleteClient(Client client)
     {       
+        //ClientsRepository.DeleteClient(client.Id);
         ClientsRepository.DeleteClient(client.Id);
     }
 }

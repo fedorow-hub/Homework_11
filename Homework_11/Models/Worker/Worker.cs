@@ -15,5 +15,5 @@ public abstract class Worker
     /// </summary>
     /// <param name="client"></param>
     /// <returns></returns>
-    public abstract Client GetClientInfo(Client client);
+    public abstract ClientAccessInfo GetClientInfo(Client client);
 }

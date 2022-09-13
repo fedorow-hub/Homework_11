@@ -15,20 +15,32 @@ namespace Homework_11.ViewModels
 {
     internal class ClientInfoViewModel : ViewModel
     {
-        private ClientAccessInfo currentClientInfo { get; set; }
-        private Bank bank { get; set; }        
-        private MainWindowViewModel MainWindowViewModel { get; set; }        
+        private ClientAccessInfo currentClientAccessInfo { get; set; }
+        private Bank bank { get; set; }
+
         
-        public ClientInfoViewModel(ClientAccessInfo clientInfo, Bank bank, MainWindowViewModel mainWindow, RoleDataAccess dataAccess)
+        private MainWindowViewModel MainWindowViewModel { get; set; }
+
+        public ClientInfoViewModel()
+        {            
+            
+        }
+        
+        public ClientInfoViewModel(ClientAccessInfo clientInfo, Bank bank, MainWindowViewModel mainWindowViewModel, RoleDataAccess dataAccess)
         {
-            this.currentClientInfo = clientInfo;
+            this.currentClientAccessInfo = clientInfo;
             this.bank = bank;
-            MainWindowViewModel = mainWindow;
-            FillFields(currentClientInfo);
+            MainWindowViewModel = mainWindowViewModel;
+
+            FillFields(currentClientAccessInfo);
             EnableFields(dataAccess);
-            //CheckSaveClient();
+            CheckSaveClient();
+            
+
+           
 
             OutCommand = new LambdaCommand(OnOutCommandExecute, CanOutCommandExecute);
+            SaveCommand = new LambdaCommand(OnSaveCommandExecute, CanSaveCommandExecute);
         }
 
         /// <summary>
@@ -55,17 +67,43 @@ namespace Homework_11.ViewModels
         {
             _enableFirstName = dataAccess.EditFields.FirstName;
             _enableLastName = dataAccess.EditFields.LastName;
-            _enableMiddleName = dataAccess.EditFields.MidleName;
+            _enablePatronymic = dataAccess.EditFields.MidleName;
             _enablePassportData = dataAccess.EditFields.PassortData;
             _enablePhoneNumber = dataAccess.EditFields.PhoneNumber;
 
-            //_borderFirstName = InputHighlighting(_enableFirstName, _firstName.Length > 0);
-            //_borderLastName = InputHighlighting(_enableLastName, _lastName.Length > 0);
-            //_borderMiddleName = InputHighlighting(_enableMiddleName, _middleName.Length > 0);
-            //_borderPassportSerie = InputHighlighting(_enablePassportData, PassportData.IsSeries(_passportSerie));
-            //_borderPassportNumber = InputHighlighting(_enablePassportData, PassportData.IsNumber(_passportNumber));
-            //_borderPhoneNumber = InputHighlighting(_enablePhoneNumber, Models.Common.PhoneNumber.IsPhoneNumber(_phoneNumber));
+            //_borderFirstName = InputHighlighting(_firstName.Length > 0);
+            //_borderLastName = InputHighlighting(_lastName.Length > 0);
+            //_borderMiddleName = InputHighlighting(_middleName.Length > 0);
+            //_borderPassportSerie = InputHighlighting(Passport.IsSeries(_passportSerie));
+            //_borderPassportNumber = InputHighlighting(Passport.IsNumber(_passportNumber));
+            _borderPhoneNumber = InputHighlighting(Models.Clients.PhoneNumber.IsPhoneNumber(_phoneNumber));
         }
+
+        private void CheckSaveClient()
+        {
+            //EnableSaveClient = _borderFirstName != InputValueHighlightingEnum.Error
+            //                   && _borderLastName != InputValueHighlightingEnum.Error
+            //                   && _borderMiddleName != InputValueHighlightingEnum.Error
+            //                   && _borderPassportSerie != InputValueHighlightingEnum.Error
+            //                   && _borderPassportNumber != InputValueHighlightingEnum.Error
+            //                   && _borderPhoneNumber != InputValueHighlightingEnum.Error;
+
+            EnableSaveClient = _borderPhoneNumber != InputValueHighlightingEnum.Error;
+        }
+
+        public enum InputValueHighlightingEnum
+        {
+            Default = 0,            
+            Error
+        }
+
+        private InputValueHighlightingEnum InputHighlighting(bool isValid)
+        {            
+            if (!isValid) return InputValueHighlightingEnum.Error;
+
+            return InputValueHighlightingEnum.Default;
+        }
+
 
         #region ClientInfo
 
@@ -120,11 +158,11 @@ namespace Homework_11.ViewModels
             }
         }
 
-        private bool _enableMiddleName;
-        public bool EnableMiddleName
+        private bool _enablePatronymic;
+        public bool EnablePatronymic
         {
-            get => _enableMiddleName;
-            set => Set(ref _enableMiddleName, value);
+            get => _enablePatronymic;
+            set => Set(ref _enablePatronymic, value);
         }
                 
         #endregion
@@ -147,7 +185,18 @@ namespace Homework_11.ViewModels
             get => _enablePhoneNumber;
             set => Set(ref _enablePhoneNumber, value);
         }
-                
+
+        private InputValueHighlightingEnum _borderPhoneNumber;
+        public InputValueHighlightingEnum BorderPhoneNumber
+        {
+            get => _borderPhoneNumber;
+            set
+            {
+                Set(ref _borderPhoneNumber, value);
+                CheckSaveClient();
+            }
+        }
+
         #endregion
 
         #region PassportData
@@ -180,7 +229,9 @@ namespace Homework_11.ViewModels
 
         #endregion
 
-        #endregion
+        #endregion      
+
+
 
         #region Commands
         #region OutCommand
@@ -190,10 +241,7 @@ namespace Homework_11.ViewModels
         private bool CanOutCommandExecute(object p) => true;
 
         private void OnOutCommandExecute(object p)
-        {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.DataContext = new MainWindowViewModel();
-            mainWindow.Show();
+        {            
             if (p is Window window)
             {
                 window.Close();
@@ -201,27 +249,28 @@ namespace Homework_11.ViewModels
         }
         #endregion
 
-        #region AddClientCommand
+        #region SaveCommand
 
-        public ICommand AddClientCommand { get; }
+        public ICommand SaveCommand { get; }
 
-        private bool CanAddClientCommandExecute(object p) => true;
+        private bool CanSaveCommandExecute(object p) => true;
 
-        private void OnAddClientCommandExecute(object p)
-        {
+        private void OnSaveCommandExecute(object p)
+        {            
             var client = new Client(_firstname, _lastname, _patronymic,
-                new PhoneNumber(_phoneNumber), new Passport(int.Parse(_passportSerie), int.Parse(_passportNumber)));
+                new PhoneNumber(_phoneNumber), _enablePassportData ? new Passport(int.Parse(_passportSerie), int.Parse(_passportNumber)) :                
+                new Passport(currentClientAccessInfo.SeriesAndNumberOfPassport.Serie, currentClientAccessInfo.SeriesAndNumberOfPassport.Number));
 
-            if (currentClientInfo.Id == 0) // новый клиент
+            if (currentClientAccessInfo.Id == 0) // новый клиент
             {
                 bank.AddClient(client);
             }
             else
             {
-                client.Id = currentClientInfo.Id;
+                client.Id = currentClientAccessInfo.Id;
                 bank.EditClient(client);
             }
-
+                     
             MainWindowViewModel.UpdateClientsList.Invoke();
 
             if (p is Window window)
@@ -230,6 +279,15 @@ namespace Homework_11.ViewModels
             }
         }
         #endregion
+        #endregion
+
+        #region EnableSaveClient
+        private bool _enableSaveClient;
+        public bool EnableSaveClient
+        {
+            get => _enableSaveClient;
+            set => Set(ref _enableSaveClient, value);
+        }
         #endregion
 
     }

@@ -22,8 +22,7 @@ namespace Homework_11.Views.Windows
     {
         public ClientInfoWindow()
         {
-            InitializeComponent();
-            DataContext = new ClientInfoViewModel();
+            InitializeComponent();           
         }
 
     }
