@@ -15,17 +15,22 @@ namespace Homework_11.ViewModels
 
         private RoleDataAccess _dataAccess;
 
+        private Worker Worker { get; set; }
+
         private MainWindowViewModel MainWindowViewModel { get; set; }
 
         public ClientInfoViewModel(){}
         
-        public ClientInfoViewModel(ClientAccessInfo clientInfo, Bank bank, MainWindowViewModel mainWindowViewModel, RoleDataAccess dataAccess)
+        public ClientInfoViewModel(ClientAccessInfo clientInfo, Bank bank, 
+            MainWindowViewModel mainWindowViewModel, RoleDataAccess dataAccess, Worker worker)
         {
             this.currentClientAccessInfo = clientInfo;
             this.bank = bank;
             MainWindowViewModel = mainWindowViewModel;
 
             _dataAccess = dataAccess;
+
+            Worker = worker;
 
             FillFields(currentClientAccessInfo);
             EnableFields(dataAccess);
@@ -334,7 +339,8 @@ namespace Homework_11.ViewModels
         {            
             var client = new Client(_firstname, _lastname, _patronymic,
                 new PhoneNumber(_phoneNumber), _enablePassportData ? new Passport(int.Parse(_passportSerie), int.Parse(_passportNumber)) :                
-                new Passport(currentClientAccessInfo.SeriesAndNumberOfPassport.Serie, currentClientAccessInfo.SeriesAndNumberOfPassport.Number));
+                new Passport(currentClientAccessInfo.SeriesAndNumberOfPassport.Serie, currentClientAccessInfo.SeriesAndNumberOfPassport.Number),
+                DateTime.Now.ToString("F"), Worker.ToString());
 
             if (currentClientAccessInfo.Id == 0) // новый клиент
             {

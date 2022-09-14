@@ -81,23 +81,36 @@
                 <ListBox.ItemTemplate >
                     <DataTemplate >
                         <Border BorderBrush="gray" BorderThickness="3" CornerRadius="10" Background="LightBlue">
-                            <StackPanel Margin="10" Width="750" >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Lastname }" Margin="0,0,5,0" FontSize="20"/>
-                                    <TextBlock Text="{Binding Firstname }" Margin="0,0,5,0" FontSize="20"/>
-                                    <TextBlock Text="{Binding Patronymic }" Margin="0,0,5,0" FontSize="20"/>
+                            <StackPanel Orientation="Horizontal" Width="750">
+                                <StackPanel Margin="10"  >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Lastname }" Margin="0,0,5,0" FontSize="20"/>
+                                        <TextBlock Text="{Binding Firstname }" Margin="0,0,5,0" FontSize="20"/>
+                                        <TextBlock Text="{Binding Patronymic }" Margin="0,0,5,0" FontSize="20"/>                                        
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Номер телефона:" Margin="0,0,5,0" FontSize="18"/>
+                                        <TextBlock Text="{Binding PhoneNumber }" FontSize="18"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Серия и номер паспорта:" Margin="0,0,10,0" FontSize="18"/>
+                                        <TextBlock Text="{Binding PassportSerie }" FontSize="18"/>
+                                        <TextBlock Text="_" FontSize="18"/>
+                                        <TextBlock Text="{Binding PassportNumber }" FontSize="18"/>
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Номер телефона:" Margin="0,0,5,0" FontSize="18"/>
-                                    <TextBlock Text="{Binding PhoneNumber }" FontSize="18"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Серия и номер паспорта:" Margin="0,0,10,0" FontSize="18"/>
-                                    <TextBlock Text="{Binding PassportSerie }" FontSize="18"/>
-                                    <TextBlock Text="-" FontSize="18"/>
-                                    <TextBlock Text="{Binding PassportNumber }" FontSize="18"/>
+                                <StackPanel Margin="20,20">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Время внесения/изменения записи:" Margin="0,0,5,0" FontSize="12"/>
+                                        <TextBlock Text="{Binding TimeOfChanging }" FontSize="12"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Сотрудник, внесший/изменивший запись:" Margin="0,0,5,0" FontSize="12"/>
+                                        <TextBlock Text="{Binding WorkerMakedChange }" FontSize="12"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
+                            
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

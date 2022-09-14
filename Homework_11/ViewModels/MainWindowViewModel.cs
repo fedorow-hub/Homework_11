@@ -121,7 +121,7 @@ namespace Homework_11.ViewModels
         private void OnAddClientCommandExecute(object p)
         {
             ClientInfoWindow infoWindow = new ClientInfoWindow();
-            ClientInfoViewModel viewModel = new ClientInfoViewModel(new ClientAccessInfo(), Bank, this, Worker.DataAccess);
+            ClientInfoViewModel viewModel = new ClientInfoViewModel(new ClientAccessInfo(), Bank, this, Worker.DataAccess, Worker);
             infoWindow.DataContext = viewModel;
             infoWindow.Show();            
         }
@@ -164,7 +164,7 @@ namespace Homework_11.ViewModels
             if (SelectedClient is null) return;
 
             ClientInfoWindow infoWindow = new ClientInfoWindow();
-            ClientInfoViewModel viewModel = new ClientInfoViewModel(SelectedClient, Bank, this, Worker.DataAccess);
+            ClientInfoViewModel viewModel = new ClientInfoViewModel(SelectedClient, Bank, this, Worker.DataAccess, Worker);
             infoWindow.DataContext = viewModel;
             infoWindow.Show();
         }

@@ -16,7 +16,7 @@ namespace Homework_11.Models.Clients
 
         }
         public ClientAccessInfo(Client client)
-            : base(client.Firstname, client.Lastname, client.Patronymic, client.PhoneNumber, client.SeriesAndNumberOfPassport)
+            : base(client.Firstname, client.Lastname, client.Patronymic, client.PhoneNumber, client.SeriesAndNumberOfPassport, client.TimeOfChanging, client.WorkerMakedChange)
         {
             PassportSerie = SeriesAndNumberOfPassport.Serie.ToString();
             PassportNumber = SeriesAndNumberOfPassport.Number.ToString();
