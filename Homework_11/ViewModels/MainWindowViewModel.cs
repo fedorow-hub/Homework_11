@@ -1,18 +1,9 @@
-﻿using Homework_11.Data;
-using Homework_11.Infrastructure.Commands;
+﻿using Homework_11.Infrastructure.Commands;
 using Homework_11.Models;
 using Homework_11.Models.Clients;
 using Homework_11.Models.Worker;
 using Homework_11.ViewModels.Base;
 using Homework_11.Views.Windows;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Homework_11.ViewModels
@@ -20,8 +11,6 @@ namespace Homework_11.ViewModels
     internal class MainWindowViewModel: ViewModel
     {
         public Action UpdateClientsList;
-
-        //public ObservableCollection<ClientAccessInfo> Clients { get; }
 
         private ObservableCollection<ClientAccessInfo> clients;
 
@@ -48,9 +37,9 @@ namespace Homework_11.ViewModels
         }
         #endregion
 
-        public MainWindowViewModel()
-        {
-        }
+        //public MainWindowViewModel()
+        //{
+        //}
         public MainWindowViewModel(Worker worker)
         {            
             Bank = new Bank("Банк А", new ClientsRepository("clients.json"), worker);            
@@ -64,14 +53,12 @@ namespace Homework_11.ViewModels
             OutLoggingCommand = new LambdaCommand(OnOutLoggingCommandExecute, CanOutLoggingCommandExecute);
             AddClientCommand = new LambdaCommand(OnAddClientCommandExecute, CanAddClientCommandExecute);
             EditClientCommand = new LambdaCommand(OnEditClientCommandExecute, CanEditClientCommandExecute);
+            #endregion
 
             _enableAddClient = Worker.DataAccess.Commands.AddClient;
             _enableDelClient = Worker.DataAccess.Commands.DelClient;
-            _enableEditClient = Worker.DataAccess.Commands.EditClient && Clients.Count > 0;
-
-            
-            #endregion
-            //UpdateClients();
+            _enableEditClient = Worker.DataAccess.Commands.EditClient && Clients.Count > 0;   
+           
             UpdateClientsList += UpdateClients;
             UpdateClientsList.Invoke();
         }
@@ -80,15 +67,12 @@ namespace Homework_11.ViewModels
         /// Обновление списка клиентов
         /// </summary>
         private void UpdateClients()
-        {
-            
+        {            
             Clients.Clear();            
             foreach (var clientInfo in Bank.GetClientsInfo())
             {
                 Clients.Add(clientInfo);
-            }                    
-
-           
+            }
         }
 
         #region SelectedClient
@@ -103,15 +87,6 @@ namespace Homework_11.ViewModels
             set => Set(ref _SelectedClient, value);
         }
         #endregion
-
-        //#region SelectedIndex
-        //private int _selectedIndex;
-        //public int SelectedIndex
-        //{
-        //    get => _selectedIndex;
-        //    set => Set(ref _selectedIndex, value);
-        //}
-        //#endregion
 
         #region Команды
 
@@ -176,7 +151,6 @@ namespace Homework_11.ViewModels
         #region EditClient
 
         public ICommand EditClientCommand { get; }
-
         
         private bool CanEditClientCommandExecute(object p)
         {

@@ -21,10 +21,7 @@ public class Client
 
     public Passport SeriesAndNumberOfPassport { get { return seriesAndNumberOfPassport; } set { seriesAndNumberOfPassport = value; } }
 
-    public Client()
-    {
-
-    }
+    public Client(){}
 
     public Client(string firstname, string lastname, string patronymic, PhoneNumber phoneNumber, Passport seriesAndNumberOfPassport)
     {
@@ -35,9 +32,9 @@ public class Client
         this.seriesAndNumberOfPassport = seriesAndNumberOfPassport;
     }
 
-    public override string ToString()
-    {
-        return $"{firstname} {lastname} {patronymic} {phoneNumber} {seriesAndNumberOfPassport}";
-    }    
+    //public override string ToString()
+    //{
+    //    return $"{firstname} {lastname} {patronymic} {phoneNumber} {seriesAndNumberOfPassport}";
+    //}    
 }
 

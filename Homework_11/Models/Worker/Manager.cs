@@ -1,9 +1,5 @@
 ﻿using Homework_11.Models.Clients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Homework_11.Models.Worker;
 public class Manager : Worker

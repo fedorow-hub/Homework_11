@@ -1,9 +1,5 @@
-﻿
-
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Data;
-using Homework_11.Data;
-using Homework_11.Models;
 using Homework_11.Models.Clients;
 
 namespace Homework_11
@@ -16,11 +12,15 @@ namespace Homework_11
 
         public MainWindow()
         {
-            InitializeComponent();
-                        
+            InitializeComponent();                        
         }
 
-        private void ClientCollectionFilter(object sender, System.Windows.Data.FilterEventArgs e)
+        /// <summary>
+        /// метод фильтрации клиентов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ClientCollectionFilter(object sender, FilterEventArgs e)
         {
             if(!(e.Item is Client client)) return;
             if(client.Firstname is null || client.Lastname is null) return;
@@ -34,6 +34,11 @@ namespace Homework_11
             e.Accepted = false;            
         }
 
+        /// <summary>
+        /// метод обновления списка на лету
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnClientFilterTextChanget(object sender, TextChangedEventArgs e)
         {
             var text_box = (TextBox)sender;

@@ -13,12 +13,8 @@ namespace Homework_11.Models.Clients
 
         public const int MinNumberValue = 100;
         public const int MaxNumberValue = 999999;
-
-        private int _serie;
-
+                
         public int Serie { get; set; }
-
-        private int _number;
 
         public int Number { get; set; }
 

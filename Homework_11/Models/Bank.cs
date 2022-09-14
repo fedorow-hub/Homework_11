@@ -1,6 +1,4 @@
-﻿using Homework_11.Data;
-using Homework_11.Models.Clients;
-using System.Windows.Controls;
+﻿using Homework_11.Models.Clients;
 
 namespace Homework_11.Models;
  internal class Bank
@@ -50,8 +48,7 @@ namespace Homework_11.Models;
     }
 
     public void DeleteClient(Client client)
-    {       
-        //ClientsRepository.DeleteClient(client.Id);
+    {   
         ClientsRepository.DeleteClient(client.Id);
     }
 }

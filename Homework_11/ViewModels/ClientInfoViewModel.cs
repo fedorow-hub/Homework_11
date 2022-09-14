@@ -1,14 +1,9 @@
 ﻿using Homework_11.Infrastructure.Commands;
+using Homework_11.Infrastructure;
 using Homework_11.Models;
 using Homework_11.Models.Clients;
 using Homework_11.Models.Worker;
 using Homework_11.ViewModels.Base;
-using Homework_11.Views.Windows;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Homework_11.ViewModels
@@ -18,13 +13,11 @@ namespace Homework_11.ViewModels
         private ClientAccessInfo currentClientAccessInfo { get; set; }
         private Bank bank { get; set; }
 
-        
+        private RoleDataAccess _dataAccess;
+
         private MainWindowViewModel MainWindowViewModel { get; set; }
 
-        public ClientInfoViewModel()
-        {            
-            
-        }
+        public ClientInfoViewModel(){}
         
         public ClientInfoViewModel(ClientAccessInfo clientInfo, Bank bank, MainWindowViewModel mainWindowViewModel, RoleDataAccess dataAccess)
         {
@@ -32,12 +25,11 @@ namespace Homework_11.ViewModels
             this.bank = bank;
             MainWindowViewModel = mainWindowViewModel;
 
+            _dataAccess = dataAccess;
+
             FillFields(currentClientAccessInfo);
             EnableFields(dataAccess);
-            CheckSaveClient();
-            
-
-           
+            CheckSaveClient(dataAccess);        
 
             OutCommand = new LambdaCommand(OnOutCommandExecute, CanOutCommandExecute);
             SaveCommand = new LambdaCommand(OnSaveCommandExecute, CanSaveCommandExecute);
@@ -71,37 +63,53 @@ namespace Homework_11.ViewModels
             _enablePassportData = dataAccess.EditFields.PassortData;
             _enablePhoneNumber = dataAccess.EditFields.PhoneNumber;
 
-            //_borderFirstName = InputHighlighting(_firstName.Length > 0);
-            //_borderLastName = InputHighlighting(_lastName.Length > 0);
-            //_borderMiddleName = InputHighlighting(_middleName.Length > 0);
-            //_borderPassportSerie = InputHighlighting(Passport.IsSeries(_passportSerie));
-            //_borderPassportNumber = InputHighlighting(Passport.IsNumber(_passportNumber));
-            _borderPhoneNumber = InputHighlighting(Models.Clients.PhoneNumber.IsPhoneNumber(_phoneNumber));
+            _borderFirstName = InputHighlighting(_enableFirstName, _firstname.Length > 0);
+            _borderLastName = InputHighlighting(_enableLastName, _lastname.Length > 0);
+            _borderPatronymic = InputHighlighting(_enablePatronymic, _patronymic.Length > 0);            
+            _borderPhoneNumber = InputHighlighting(_enablePhoneNumber, Models.Clients.PhoneNumber.IsPhoneNumber(_phoneNumber));
+            if(dataAccess.EditFields.PassortData == true)
+            {
+                _borderPassportSerie = InputHighlighting(_enablePassportData, Passport.IsSeries(_passportSerie));
+                _borderPassportNumber = InputHighlighting(_enablePassportData, Passport.IsNumber(_passportNumber));
+            }
         }
-
-        private void CheckSaveClient()
+        
+        /// <summary>
+        /// метод для блокирования кнопки сохранения, если введенные данные не валидны
+        /// </summary>
+        /// <param name="dataAccess"></param>
+        private void CheckSaveClient(RoleDataAccess dataAccess)
         {
-            //EnableSaveClient = _borderFirstName != InputValueHighlightingEnum.Error
-            //                   && _borderLastName != InputValueHighlightingEnum.Error
-            //                   && _borderMiddleName != InputValueHighlightingEnum.Error
-            //                   && _borderPassportSerie != InputValueHighlightingEnum.Error
-            //                   && _borderPassportNumber != InputValueHighlightingEnum.Error
-            //                   && _borderPhoneNumber != InputValueHighlightingEnum.Error;
-
-            EnableSaveClient = _borderPhoneNumber != InputValueHighlightingEnum.Error;
+            if (dataAccess.EditFields.PassortData == false)
+            {
+                EnableSaveClient = _borderFirstName != InputValueValidationEnum.Error
+                               && _borderLastName != InputValueValidationEnum.Error
+                               && _borderPatronymic != InputValueValidationEnum.Error                              
+                               && _borderPhoneNumber != InputValueValidationEnum.Error;
+            }
+            else
+            {
+                EnableSaveClient = _borderFirstName != InputValueValidationEnum.Error
+                               && _borderLastName != InputValueValidationEnum.Error
+                               && _borderPatronymic != InputValueValidationEnum.Error
+                               && _borderPassportSerie != InputValueValidationEnum.Error
+                               && _borderPassportNumber != InputValueValidationEnum.Error
+                               && _borderPhoneNumber != InputValueValidationEnum.Error;
+            }                   
         }
-
-        public enum InputValueHighlightingEnum
-        {
-            Default = 0,            
-            Error
-        }
-
-        private InputValueHighlightingEnum InputHighlighting(bool isValid)
+        
+        /// <summary>
+        /// метод установки модификаторов валидности
+        /// </summary>
+        /// <param name="isEnable"></param>
+        /// <param name="isValid"></param>
+        /// <returns></returns>
+        private InputValueValidationEnum InputHighlighting(bool isEnable, bool isValid)
         {            
-            if (!isValid) return InputValueHighlightingEnum.Error;
+            if (!isValid) return InputValueValidationEnum.Error;
+            if (!isEnable) return InputValueValidationEnum.Disable;
 
-            return InputValueHighlightingEnum.Default;
+            return InputValueValidationEnum.Default;
         }
 
 
@@ -114,7 +122,9 @@ namespace Homework_11.ViewModels
             get => _firstname;
             set
             {
-                Set(ref _firstname, value);                
+                Set(ref _firstname, value);
+                BorderFirstName =
+                InputHighlighting(_enableFirstName, _firstname.Length > 2);
             }
         }
 
@@ -124,7 +134,18 @@ namespace Homework_11.ViewModels
             get => _enableFirstName;
             set => Set(ref _enableFirstName, value);
         }
-                
+
+        private InputValueValidationEnum _borderFirstName;
+        public InputValueValidationEnum BorderFirstName
+        {
+            get => _borderFirstName;
+            set
+            {
+                Set(ref _borderFirstName, value);
+                CheckSaveClient(_dataAccess);
+            }
+        }
+
         #endregion
 
         #region Lastname
@@ -134,7 +155,9 @@ namespace Homework_11.ViewModels
             get => _lastname;
             set
             {
-                Set(ref _lastname, value);                
+                Set(ref _lastname, value);
+                BorderLastName =
+                InputHighlighting(_enableLastName, _lastname.Length > 2);
             }
         }
 
@@ -143,6 +166,17 @@ namespace Homework_11.ViewModels
         {
             get => _enableLastName;
             set => Set(ref _enableLastName, value);
+        }
+
+        private InputValueValidationEnum _borderLastName;
+        public InputValueValidationEnum BorderLastName
+        {
+            get => _borderLastName;
+            set
+            {
+                Set(ref _borderLastName, value);
+                CheckSaveClient(_dataAccess);
+            }
         }
 
         #endregion
@@ -154,7 +188,9 @@ namespace Homework_11.ViewModels
             get => _patronymic;
             set
             {
-                Set(ref _patronymic, value);                
+                Set(ref _patronymic, value);
+                BorderPatronymic =
+                InputHighlighting(_enablePatronymic, _patronymic.Length > 2);
             }
         }
 
@@ -164,7 +200,18 @@ namespace Homework_11.ViewModels
             get => _enablePatronymic;
             set => Set(ref _enablePatronymic, value);
         }
-                
+
+        private InputValueValidationEnum _borderPatronymic;
+        public InputValueValidationEnum BorderPatronymic
+        {
+            get => _borderPatronymic;
+            set
+            {
+                Set(ref _borderPatronymic, value);
+                CheckSaveClient(_dataAccess);
+            }
+        }
+
         #endregion
 
         #region PhoneNumber
@@ -175,7 +222,8 @@ namespace Homework_11.ViewModels
             get => _phoneNumber;
             set
             {
-                Set(ref _phoneNumber, value);                
+                Set(ref _phoneNumber, value);
+                BorderPhoneNumber = InputHighlighting(_enablePhoneNumber, Models.Clients.PhoneNumber.IsPhoneNumber(_phoneNumber));
             }
         }
 
@@ -186,14 +234,14 @@ namespace Homework_11.ViewModels
             set => Set(ref _enablePhoneNumber, value);
         }
 
-        private InputValueHighlightingEnum _borderPhoneNumber;
-        public InputValueHighlightingEnum BorderPhoneNumber
+        private InputValueValidationEnum _borderPhoneNumber;
+        public InputValueValidationEnum BorderPhoneNumber
         {
             get => _borderPhoneNumber;
             set
             {
                 Set(ref _borderPhoneNumber, value);
-                CheckSaveClient();
+                CheckSaveClient(_dataAccess);
             }
         }
 
@@ -207,6 +255,7 @@ namespace Homework_11.ViewModels
             set
             {
                 Set(ref _passportSerie, value);                
+                BorderPassportSerie = InputHighlighting(_enablePassportData, Passport.IsSeries(_passportSerie));
             }
         }
 
@@ -216,7 +265,8 @@ namespace Homework_11.ViewModels
             get => _passportNumber;
             set
             {
-                Set(ref _passportNumber, value);                
+                Set(ref _passportNumber, value);
+                BorderPassportNumber = InputHighlighting(_enablePassportData, Passport.IsNumber(_passportNumber));
             }
         }
 
@@ -227,15 +277,40 @@ namespace Homework_11.ViewModels
             set => Set(ref _enablePassportData, value);
         }
 
+        private InputValueValidationEnum _borderPassportSerie;
+        public InputValueValidationEnum BorderPassportSerie
+        {
+            get => _borderPassportSerie;
+            set
+            {
+                Set(ref _borderPassportSerie, value);
+                if(_dataAccess.EditFields.PassortData == true)
+                {
+                    CheckSaveClient(_dataAccess);
+                }                
+            }
+        }
+
+        private InputValueValidationEnum _borderPassportNumber;
+        public InputValueValidationEnum BorderPassportNumber
+        {
+            get => _borderPassportNumber;
+            set
+            {
+                Set(ref _borderPassportNumber, value);
+                if (_dataAccess.EditFields.PassortData == true)
+                {
+                    CheckSaveClient(_dataAccess);
+                }
+            }
+        }
+
         #endregion
 
         #endregion      
 
-
-
         #region Commands
         #region OutCommand
-
         public ICommand OutCommand { get; }
 
         private bool CanOutCommandExecute(object p) => true;
@@ -288,7 +363,7 @@ namespace Homework_11.ViewModels
             get => _enableSaveClient;
             set => Set(ref _enableSaveClient, value);
         }
-        #endregion
+        #endregion        
 
     }
 }
